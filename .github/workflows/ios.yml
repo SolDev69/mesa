@@ -11,6 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: upgrade python and install mako
+        run: |
+           python -m pip install --upgrade pip
+           pip install mako
+
       - name: Build iOS
         run: |
           git clone --depth 1 https://github.com/KhronosGroup/MoltenVK
@@ -20,10 +30,9 @@ jobs:
           # cp -R /usr/include/X11 include/
           # cp -R /usr/include/xcb include/
           # cp -R /usr/include/GL/* include/GL/
-          pip3 install mako
           # -Dglx=gallium-xlib \
           # -Dglx=dri
-          meson build-ios-aarch64 \
+          meson setup build-ios-aarch64 \
             --prefix="/tmp/zink" \
             --cross-file ios-aarch64 \
             -Dmoltenvk-dir=../../../../MoltenVK/MoltenVK \
